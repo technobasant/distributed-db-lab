@@ -1,6 +1,6 @@
 # distributed-db-lab
 
-Scaling PostgreSQL out with Citus, time-series at scale with TimescaleDB, and a replicated ClickHouse cluster — on one laptop, with the failures I hit and the numbers that came off the runs.
+Scaling PostgreSQL out with Citus, time-series at scale with TimescaleDB, and a replicated ClickHouse cluster — real multi-node clusters, one container per node, with the failures I hit and the numbers that came off the runs.
 
 [![ci](https://github.com/technobasant/distributed-db-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/technobasant/distributed-db-lab/actions/workflows/ci.yml)
 
@@ -166,7 +166,7 @@ These cost more time than everything that worked, and none of them came with an 
 
 ## Limits
 
-- **One laptop, and not a quiet one.** Load average 10–44 during the runs; medians are the figures to trust, small differences are not findings. See MEASUREMENTS.md.
+- **One host, and not a quiet one.** Every node is its own container on the same machine; load average 10–44 during the runs; medians are the figures to trust, small differences are not findings. See MEASUREMENTS.md.
 - **Synthetic data.** Seeded and shaped on purpose — Zipf tenants, a 15% whale, time-ordered arrival — but synthetic.
 - **Docker networking and one VM.** No real network between nodes, so no partitions, and latency between "nodes" is loopback.
 - **One ClickHouse Keeper.** Enough to coordinate replication, not a quorum.
@@ -178,7 +178,7 @@ These cost more time than everything that worked, and none of them came with an 
 
 ## Related
 
-- [db-failover-lab](https://github.com/technobasant/db-failover-lab) — six engines, eight failover scenarios, the same one-laptop rule.
+- [db-failover-lab](https://github.com/technobasant/db-failover-lab) — six engines, eight failover scenarios, the same rule: one container per node, every figure measured.
 - [postgres-ha-lab](https://github.com/technobasant/postgres-ha-lab) — Patroni, etcd and pgBackRest: failover, replica rebuild and point-in-time restore.
 - Writing: [basantbhattarai.com.np/writing](https://basantbhattarai.com.np/writing/)
 

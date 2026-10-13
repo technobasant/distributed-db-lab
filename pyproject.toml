@@ -1,7 +1,7 @@
 [project]
 name = "distributed-db-lab"
 version = "0.1.0"
-description = "Horizontal scale-out of Postgres with Citus, time-series with TimescaleDB, and a replicated ClickHouse cluster — on one laptop, measured."
+description = "Horizontal scale-out of Postgres with Citus, time-series with TimescaleDB, and a replicated ClickHouse cluster — multi-node, measured."
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Basant Bhattarai" }]
