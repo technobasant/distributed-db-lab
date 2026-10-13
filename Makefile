@@ -2,7 +2,7 @@
 #
 #   make setup          uv venv + dependencies
 #   make check          ruff, tests, shellcheck, compose validation
-#   make data           generate all three datasets at lab scale (~2 GB of CSV)
+#   make data           generate all three datasets at lab scale (~2.5 GB of CSV)
 #   make citus          Citus: cluster, naive attempt, plan, migrate, queries, rebalance, skew
 #   make tsdb           TimescaleDB: keys, chunks, compression, caggs, retention, vacuum
 #   make ch             ClickHouse: schema, load, variants, MV, parts, replica failover
