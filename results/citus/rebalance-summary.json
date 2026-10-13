@@ -1,0 +1,76 @@
+{
+  "marks": {
+    "start": 1791868538.399,
+    "end": 1791868575.463,
+    "note": "start = job 2 task 9 (replicate reference tables) started; end = task 16 (7th shard-group move) succeeded; from the coordinator log"
+  },
+  "before": {
+    "seconds": 30.8,
+    "ops_per_s": 2495.3,
+    "read_ms": {
+      "n": 61361,
+      "p50": 1.404,
+      "p95": 6.979,
+      "p99": 24.661,
+      "mean": 3.14,
+      "min": 0.33,
+      "max": 2689.757
+    },
+    "write_ms": {
+      "n": 15420,
+      "p50": 1.476,
+      "p95": 10.002,
+      "p99": 37.973,
+      "mean": 3.432,
+      "min": 0.391,
+      "max": 407.869
+    },
+    "errors": {}
+  },
+  "during": {
+    "seconds": 37.1,
+    "ops_per_s": 2074.2,
+    "read_ms": {
+      "n": 61503,
+      "p50": 1.658,
+      "p95": 9.568,
+      "p99": 33.569,
+      "mean": 3.418,
+      "min": 0.382,
+      "max": 477.348
+    },
+    "write_ms": {
+      "n": 15370,
+      "p50": 2.037,
+      "p95": 18.894,
+      "p99": 54.719,
+      "mean": 5.569,
+      "min": 0.444,
+      "max": 480.589
+    },
+    "errors": {}
+  },
+  "after": {
+    "seconds": 532.0,
+    "ops_per_s": 1548.4,
+    "read_ms": {
+      "n": 658961,
+      "p50": 2.088,
+      "p95": 11.595,
+      "p99": 42.87,
+      "mean": 4.524,
+      "min": 0.352,
+      "max": 5238.976
+    },
+    "write_ms": {
+      "n": 164753,
+      "p50": 3.568,
+      "p95": 23.086,
+      "p99": 66.048,
+      "mean": 7.714,
+      "min": 0.449,
+      "max": 4355.2
+    },
+    "errors": {}
+  }
+}

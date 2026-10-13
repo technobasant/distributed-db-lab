@@ -1,0 +1,10 @@
+## by_disk_size rebalance seconds: 0.8
+state	jsonb_array_length
+finished	0
+(1 row)
+## node bytes after isolating the whale and rebalancing by disk size
+nodename	event_shards	bytes
+worker1	12	358359040
+worker2	12	282460160
+worker3	10	666697728
+(3 rows)

@@ -1,0 +1,71 @@
+== 1. foreign key into a table that is still local
+psql:/sql/03-naive-attempt.sql:10: ERROR:  referenced table "tenants" must be a distributed table or a reference table
+DETAIL:  To enforce foreign keys, the referencing and referenced rows need to be stored on the same node.
+HINT:  You could use SELECT create_reference_table('tenants') to replicate the referenced table to all nodes or consider dropping the foreign key
+== 2. local tables still reference the table being distributed
+BEGIN
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  Copying data from local table...
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.countries$$)
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.users$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.users$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.tenants$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.events$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.orders$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.plans$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.projects$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.webhooks$$) prevents this for the given relation, and all of the connected relations
+psql:/sql/03-naive-attempt.sql:14: NOTICE:  local tables that are added to metadata automatically by citus, but not chained with reference tables via foreign keys might be automatically converted back to postgres tables
+HINT:  Executing citus_add_local_table_to_metadata($$public.webhook_deliveries$$) prevents this for the given relation, and all of the connected relations
+ create_reference_table 
+------------------------
+ 
+(1 row)
+
+ create_reference_table 
+------------------------
+ 
+(1 row)
+
+psql:/sql/03-naive-attempt.sql:16: NOTICE:  Copying data from local table...
+psql:/sql/03-naive-attempt.sql:16: NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.tenants$$)
+psql:/sql/03-naive-attempt.sql:16: ERROR:  cannot create foreign key constraint since foreign keys from reference tables and local tables to distributed tables are not supported
+DETAIL:  Reference tables and local tables can only have foreign keys to reference tables and local tables
+ROLLBACK
+== 3. primary key and unique constraint that omit the distribution column
+BEGIN
+DO
+psql:/sql/03-naive-attempt.sql:26: ERROR:  cannot create constraint on "users"
+DETAIL:  Distributed relations cannot have UNIQUE, EXCLUDE, or PRIMARY KEY constraints that do not include the partition column (with an equality operator if EXCLUDE).
+ROLLBACK
+== 4. rows whose distribution column is NULL
+BEGIN
+DO
+ALTER TABLE
+psql:/sql/03-naive-attempt.sql:37: NOTICE:  Copying data from local table...
+psql:/sql/03-naive-attempt.sql:37: ERROR:  the partition column of table public.events cannot be NULL
+ROLLBACK
+== 5. mixed-case identifiers fold to lower case unless quoted
+psql:/sql/03-naive-attempt.sql:41: ERROR:  relation "auditlog" does not exist
+LINE 1: SELECT create_distributed_table('AuditLog', 'TenantId');
+                                        ^
+psql:/sql/03-naive-attempt.sql:42: ERROR:  column "tenantid" of relation "AuditLog" does not exist
+== 6. the tenant was never stored on this table
+psql:/sql/03-naive-attempt.sql:45: ERROR:  column "tenant_id" of relation "webhook_deliveries" does not exist
+== nothing above was kept
+ distributed_tables 
+--------------------
+                  0
+(1 row)
+

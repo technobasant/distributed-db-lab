@@ -1,0 +1,17 @@
+## node bytes after the count-based rebalance
+nodename	event_shards	bytes
+worker1	12	358359040
+worker2	12	282460160
+worker3	8	665149440
+(3 rows)
+## events shards: largest, median, and the whale's
+?column?	max
+largest	171687936
+median	23109632
+whale (tenant 1)	171687936
+(3 rows)
+## moves each strategy would make now
+?column?	count
+by_shard_count	16
+by_disk_size	0
+(2 rows)

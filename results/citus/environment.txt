@@ -1,0 +1,8 @@
+date_utc: 2026-10-13T05:58:48Z
+host: Apple M5, 10 cores (4P+6E), 24 GiB RAM, macOS 27.0.1
+docker: Docker Desktop 29.8.2, VM 8 CPUs, 12526637056 bytes RAM, aarch64
+compose: 5.5.1
+citus_image: sha256:f87955bfdbbd19dc358b4b59e9bb65052f7d065a640192d925fd278c6b116a55 (built from citusdata/citus v14.2.0 on postgres:17-bookworm)
+postgres_base: 
+citus_version: Citus 14.2.0 on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit gitref: v14.2.0
+postgres_version: 17.11 (Debian 17.11-1.pgdg12+2)

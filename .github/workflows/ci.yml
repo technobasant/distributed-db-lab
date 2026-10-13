@@ -1,0 +1,67 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - name: ruff
+        run: |
+          uv run ruff check tools tests
+          uv run ruff format --check tools tests
+      - name: tests (generator, planner, harness)
+        run: uv run pytest -q
+      - name: shellcheck
+        run: shellcheck */scripts/*.sh
+      - name: compose files are valid
+        run: |
+          for f in citus/docker-compose.yml timescaledb/docker-compose.yml \
+                   clickhouse/docker-compose.yml compare/docker-compose.yml; do
+            docker compose -f "$f" config -q
+          done
+
+  # A real migration on a real cluster, at tiny scale. The runner is amd64, so
+  # it uses the official Citus image instead of building from source.
+  citus-smoke:
+    runs-on: ubuntu-latest
+    needs: checks
+    env:
+      CITUS_IMAGE: citusdata/citus:14.2.0-pg17
+      PY: .venv/bin/python
+      REFERENCE_MAX_ROWS: "100"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - name: tiny dataset
+        run: uv run python tools/datagen.py saas --scale tiny --out data/saas
+      - name: cluster
+        run: |
+          docker compose -f citus/docker-compose.yml pull coordinator worker1 worker2
+          citus/scripts/citus.sh up
+          citus/scripts/citus.sh cluster
+      - name: legacy schema, the naive attempt, the plan, the migration
+        run: |
+          citus/scripts/citus.sh load
+          citus/scripts/citus.sh naive
+          citus/scripts/citus.sh plan
+          citus/scripts/citus.sh migrate
+          citus/scripts/citus.sh verify
+      - name: every table placed, every foreign key back
+        run: |
+          q() { docker compose -f citus/docker-compose.yml exec -T coordinator psql -U postgres -X -A -t -c "$1"; }
+          test "$(q "SELECT count(*) FROM citus_tables")" = 10
+          test "$(q "SELECT count(*) FROM pg_constraint WHERE contype = 'f' AND connamespace = 'public'::regnamespace")" = 11
+          test "$(q "SELECT count(*) FROM events WHERE tenant_id IS NULL")" = 0
+      - if: always()
+        run: citus/scripts/citus.sh down

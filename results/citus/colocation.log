@@ -1,0 +1,14 @@
+NOTICE:  table "events_by_user" does not exist, skipping
+DROP TABLE
+SELECT 5124635
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.events_by_user$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+ERROR:  the query contains a join that requires repartitioning
+HINT:  Set citus.enable_repartition_joins to on to enable repartitioning

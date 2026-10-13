@@ -1,0 +1,4 @@
+nodename	shards	size	bytes
+worker1	15	536 MB	561856512
+worker2	17	469 MB	491790336
+(2 rows)

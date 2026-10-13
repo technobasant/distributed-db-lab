@@ -1,0 +1,173 @@
+{
+  "root": "tenants",
+  "key": "id",
+  "distributed": {
+    "AuditLog": "TenantId",
+    "events": "tenant_id",
+    "orders": "tenant_id",
+    "projects": "tenant_id",
+    "tenants": "id",
+    "users": "tenant_id",
+    "webhook_deliveries": "tenant_id",
+    "webhooks": "tenant_id"
+  },
+  "reference": [
+    "countries",
+    "plans"
+  ],
+  "local": [],
+  "issues": [
+    {
+      "code": "MISSING_KEY",
+      "table": "webhook_deliveries",
+      "detail": "no tenant column; it reaches webhooks through webhook_deliveries_webhook_id_fkey, so the key can be backfilled from webhooks.tenant_id",
+      "fix": [
+        "ALTER TABLE \"webhook_deliveries\" ADD COLUMN \"tenant_id\" bigint;",
+        "UPDATE \"webhook_deliveries\" c SET \"tenant_id\" = p.\"tenant_id\" FROM \"webhooks\" p WHERE c.\"webhook_id\" = p.\"id\";",
+        "ALTER TABLE \"webhook_deliveries\" ALTER COLUMN \"tenant_id\" SET NOT NULL;"
+      ]
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "users",
+      "detail": "PRIMARY KEY users_pkey (id) omits tenant_id",
+      "fix": [
+        "ALTER TABLE \"events\" DROP CONSTRAINT IF EXISTS \"events_user_id_fkey\";",
+        "ALTER TABLE \"orders\" DROP CONSTRAINT IF EXISTS \"orders_user_id_fkey\";",
+        "ALTER TABLE \"users\" DROP CONSTRAINT \"users_pkey\";",
+        "ALTER TABLE \"users\" ADD CONSTRAINT \"users_pkey\" PRIMARY KEY (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "users",
+      "detail": "UNIQUE users_email_key (email) omits tenant_id \u2014 uniqueness becomes per tenant",
+      "fix": [
+        "ALTER TABLE \"users\" DROP CONSTRAINT \"users_email_key\";",
+        "ALTER TABLE \"users\" ADD CONSTRAINT \"users_email_key\" UNIQUE (\"tenant_id\", \"email\");"
+      ]
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "projects",
+      "detail": "PRIMARY KEY projects_pkey (id) omits tenant_id",
+      "fix": [
+        "ALTER TABLE \"events\" DROP CONSTRAINT IF EXISTS \"events_project_id_fkey\";",
+        "ALTER TABLE \"projects\" DROP CONSTRAINT \"projects_pkey\";",
+        "ALTER TABLE \"projects\" ADD CONSTRAINT \"projects_pkey\" PRIMARY KEY (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "events",
+      "detail": "PRIMARY KEY events_pkey (id) omits tenant_id",
+      "fix": [
+        "ALTER TABLE \"events\" DROP CONSTRAINT \"events_pkey\";",
+        "ALTER TABLE \"events\" ADD CONSTRAINT \"events_pkey\" PRIMARY KEY (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "FK_WITHOUT_KEY",
+      "table": "events",
+      "detail": "events_user_id_fkey (user_id) -> users omits the tenant key",
+      "fix": [
+        "ALTER TABLE \"events\" DROP CONSTRAINT IF EXISTS \"events_user_id_fkey\";",
+        "-- re-added after distribution, co-located: (tenant_id, user_id) -> users (tenant_id, id)",
+        "ALTER TABLE \"events\" ADD CONSTRAINT \"events_user_id_fkey\" FOREIGN KEY (\"tenant_id\", \"user_id\") REFERENCES \"users\" (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "FK_WITHOUT_KEY",
+      "table": "events",
+      "detail": "events_project_id_fkey (project_id) -> projects omits the tenant key",
+      "fix": [
+        "ALTER TABLE \"events\" DROP CONSTRAINT IF EXISTS \"events_project_id_fkey\";",
+        "-- re-added after distribution, co-located: (tenant_id, project_id) -> projects (tenant_id, id)",
+        "ALTER TABLE \"events\" ADD CONSTRAINT \"events_project_id_fkey\" FOREIGN KEY (\"tenant_id\", \"project_id\") REFERENCES \"projects\" (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "NULL_KEY",
+      "table": "events",
+      "detail": "30,114 rows have NULL tenant_id; Citus cannot place them on a shard",
+      "fix": [
+        "-- option A (used here): give orphan rows a reserved 'system' tenant and drop",
+        "-- their references to rows that belong to real tenants",
+        "INSERT INTO \"tenants\" (\"id\", name) VALUES (0, 'system') ON CONFLICT DO NOTHING;",
+        "UPDATE \"events\" SET \"tenant_id\" = 0, \"user_id\" = NULL, \"project_id\" = NULL WHERE \"tenant_id\" IS NULL;",
+        "ALTER TABLE \"events\" ALTER COLUMN \"tenant_id\" SET NOT NULL;",
+        "-- option B: move them to a separate local table before distributing"
+      ]
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "orders",
+      "detail": "PRIMARY KEY orders_pkey (id) omits tenant_id",
+      "fix": [
+        "ALTER TABLE \"orders\" DROP CONSTRAINT \"orders_pkey\";",
+        "ALTER TABLE \"orders\" ADD CONSTRAINT \"orders_pkey\" PRIMARY KEY (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "FK_WITHOUT_KEY",
+      "table": "orders",
+      "detail": "orders_user_id_fkey (user_id) -> users omits the tenant key",
+      "fix": [
+        "ALTER TABLE \"orders\" DROP CONSTRAINT IF EXISTS \"orders_user_id_fkey\";",
+        "-- re-added after distribution, co-located: (tenant_id, user_id) -> users (tenant_id, id)",
+        "ALTER TABLE \"orders\" ADD CONSTRAINT \"orders_user_id_fkey\" FOREIGN KEY (\"tenant_id\", \"user_id\") REFERENCES \"users\" (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "AuditLog",
+      "detail": "PRIMARY KEY AuditLog_pkey (Id) omits TenantId",
+      "fix": [
+        "ALTER TABLE \"AuditLog\" DROP CONSTRAINT \"AuditLog_pkey\";",
+        "ALTER TABLE \"AuditLog\" ADD CONSTRAINT \"AuditLog_pkey\" PRIMARY KEY (\"TenantId\", \"Id\");"
+      ]
+    },
+    {
+      "code": "MIXED_CASE",
+      "table": "AuditLog",
+      "detail": "identifiers that fold to lower case unless quoted: AuditLog, Id, TenantId, Action, CreatedAt",
+      "fix": []
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "webhooks",
+      "detail": "PRIMARY KEY webhooks_pkey (id) omits tenant_id",
+      "fix": [
+        "ALTER TABLE \"webhook_deliveries\" DROP CONSTRAINT IF EXISTS \"webhook_deliveries_webhook_id_fkey\";",
+        "ALTER TABLE \"webhooks\" DROP CONSTRAINT \"webhooks_pkey\";",
+        "ALTER TABLE \"webhooks\" ADD CONSTRAINT \"webhooks_pkey\" PRIMARY KEY (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "PK_WITHOUT_KEY",
+      "table": "webhook_deliveries",
+      "detail": "PRIMARY KEY webhook_deliveries_pkey (id) omits tenant_id",
+      "fix": [
+        "ALTER TABLE \"webhook_deliveries\" DROP CONSTRAINT \"webhook_deliveries_pkey\";",
+        "ALTER TABLE \"webhook_deliveries\" ADD CONSTRAINT \"webhook_deliveries_pkey\" PRIMARY KEY (\"tenant_id\", \"id\");"
+      ]
+    },
+    {
+      "code": "FK_WITHOUT_KEY",
+      "table": "webhook_deliveries",
+      "detail": "webhook_deliveries_webhook_id_fkey (webhook_id) -> webhooks omits the tenant key",
+      "fix": [
+        "ALTER TABLE \"webhook_deliveries\" DROP CONSTRAINT IF EXISTS \"webhook_deliveries_webhook_id_fkey\";",
+        "-- re-added after distribution, co-located: (tenant_id, webhook_id) -> webhooks (tenant_id, id)",
+        "ALTER TABLE \"webhook_deliveries\" ADD CONSTRAINT \"webhook_deliveries_webhook_id_fkey\" FOREIGN KEY (\"tenant_id\", \"webhook_id\") REFERENCES \"webhooks\" (\"tenant_id\", \"id\");"
+      ]
+    }
+  ],
+  "issue_counts": {
+    "FK_WITHOUT_KEY": 4,
+    "MISSING_KEY": 1,
+    "MIXED_CASE": 1,
+    "NULL_KEY": 1,
+    "PK_WITHOUT_KEY": 8
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "start": 1791868538.399,
+  "end": 1791868575.463,
+  "note": "start = job 2 task 9 (replicate reference tables) started; end = task 16 (7th shard-group move) succeeded; from the coordinator log"
+}

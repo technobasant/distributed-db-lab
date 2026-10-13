@@ -1,0 +1,93 @@
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.countries$$)
+ create_reference_table 
+------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.plans$$)
+ create_reference_table 
+------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.tenants$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public."AuditLog"$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.events$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.orders$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.projects$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.users$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.webhook_deliveries$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.webhooks$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+ERROR:  insert or update on table "events_102201" violates foreign key constraint "events_user_id_fkey_102201"
+DETAIL:  Key (tenant_id, user_id)=(0, 2) is not present in table "users_102297".
+CONTEXT:  while executing command on worker2:5432

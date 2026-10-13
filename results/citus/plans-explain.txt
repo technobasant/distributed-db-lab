@@ -1,0 +1,56 @@
+                                                       QUERY PLAN                                                        
+-------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (Citus Adaptive)
+   Task Count: 1
+   Tasks Shown: All
+   ->  Task
+         Node: host=worker2 port=5432 dbname=postgres
+         ->  Aggregate
+               ->  Bitmap Heap Scan on events_102473 events
+                     Recheck Cond: ((tenant_id = 42) AND (ts >= '2026-08-01 00:00:00+00'::timestamp with time zone))
+                     ->  Bitmap Index Scan on events_tenant_id_ts_idx_102473
+                           Index Cond: ((tenant_id = 42) AND (ts >= '2026-08-01 00:00:00+00'::timestamp with time zone))
+(10 rows)
+
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ HashAggregate
+   Group Key: remote_scan.event_type
+   ->  Custom Scan (Citus Adaptive)
+         Task Count: 32
+         Tasks Shown: One of 32
+         ->  Task
+               Node: host=worker1 port=5432 dbname=postgres
+               ->  Finalize GroupAggregate
+                     Group Key: event_type
+                     ->  Gather Merge
+                           Workers Planned: 1
+                           ->  Sort
+                                 Sort Key: event_type
+                                 ->  Partial HashAggregate
+                                       Group Key: event_type
+                                       ->  Parallel Seq Scan on events_102446 events
+(16 rows)
+
+                                 QUERY PLAN                                 
+----------------------------------------------------------------------------
+ Custom Scan (Citus Adaptive)
+   Task Count: 1
+   Tasks Shown: All
+   ->  Task
+         Node: host=worker2 port=5432 dbname=postgres
+         ->  HashAggregate
+               Group Key: u.country_code
+               ->  Hash Join
+                     Hash Cond: (e.user_id = u.id)
+                     ->  Bitmap Heap Scan on events_102473 e
+                           Recheck Cond: (tenant_id = 42)
+                           ->  Bitmap Index Scan on events_pkey_102473
+                                 Index Cond: (tenant_id = 42)
+                     ->  Hash
+                           ->  Bitmap Heap Scan on users_102569 u
+                                 Recheck Cond: (tenant_id = 42)
+                                 ->  Bitmap Index Scan on users_pkey_102569
+                                       Index Cond: (tenant_id = 42)
+(18 rows)
+

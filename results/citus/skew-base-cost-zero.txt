@@ -1,0 +1,23 @@
+SET
+ shard_rows_to_move 
+--------------------
+                 16
+(1 row)
+ citus_rebalance_start 
+-----------------------
+                     4
+(1 row)
+ citus_rebalance_wait 
+----------------------
+ 
+(1 row)
+  state   | tasks | seconds 
+----------+-------+---------
+ finished |     0 |    13.9
+(1 row)
+ nodename | event_shards |   bytes   |  size  
+----------+--------------+-----------+--------
+ worker1  |           13 | 438181888 | 418 MB
+ worker2  |           13 | 455786496 | 435 MB
+ worker3  |            8 | 414670848 | 395 MB
+(3 rows)

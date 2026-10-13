@@ -1,0 +1,46 @@
+ record_id |           object_name            | node_group_id 
+-----------+----------------------------------+---------------
+       279 | public.tenants_102385            |             7
+       280 | public."AuditLog_102417"         |             7
+       281 | public.events_102449             |             7
+       282 | public.orders_102481             |             7
+       283 | public.projects_102513           |             7
+       284 | public.users_102545              |             7
+       285 | public.webhook_deliveries_102577 |             7
+       286 | public.webhooks_102609           |             7
+(8 rows)
+
+DELETE 8
+NOTICE:  Scheduled 1 moves as job 3
+DETAIL:  Rebalance scheduled as background job
+HINT:  To monitor progress, run: SELECT * FROM citus_rebalance_status();
+ citus_rebalance_start 
+-----------------------
+                     3
+(1 row)
+
+ citus_rebalance_wait 
+----------------------
+ 
+(1 row)
+
+  state   | seconds 
+----------+---------
+ finished |     5.3
+(1 row)
+
+ nodename | shard_groups 
+----------+--------------
+ worker1  |           12
+ worker2  |           12
+ worker3  |            8
+(3 rows)
+
+  nodename   | all_tables 
+-------------+------------
+ coordinator | 64 kB
+ worker1     | 342 MB
+ worker2     | 269 MB
+ worker3     | 635 MB
+(4 rows)
+

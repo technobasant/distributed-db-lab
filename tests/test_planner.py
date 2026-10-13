@@ -155,3 +155,32 @@ def test_emitted_sql_orders_fixes_before_distribution_and_quotes_everything():
         "create_distributed_table"
     )
     assert q('we"ird') == '"we""ird"'
+
+
+def test_every_foreign_key_is_dropped_before_any_table_is_distributed():
+    cat = legacy_catalog()
+    sql = emit_sql(cat, plan(cat))
+    first_dist = sql.index("create_distributed_table")
+    n_fks = sum(len(t.fks()) for t in cat.tables.values())
+    drops = [line for line in sql.splitlines() if "DROP CONSTRAINT IF EXISTS" in line]
+    assert len(drops) == n_fks
+    assert all(sql.index(d) < first_dist for d in drops)
+    # FKs to the root and to reference tables return unchanged; others gain the key
+    assert (
+        'ADD CONSTRAINT "users_tenant_fk" FOREIGN KEY ("tenant_id") REFERENCES "tenants" ("id")'
+        in sql
+    )
+    assert 'ADD CONSTRAINT "users_country_fk" FOREIGN KEY ("country_code")' in sql
+    assert (
+        'ADD CONSTRAINT "deliveries_webhook_fk" FOREIGN KEY ("tenant_id", "webhook_id") '
+        'REFERENCES "webhooks" ("tenant_id", "id")' in sql
+    )
+
+
+def test_null_key_fix_clears_cross_tenant_references():
+    cat = legacy_catalog()
+    sql = emit_sql(cat, plan(cat))
+    assert (
+        'UPDATE "events" SET "tenant_id" = 0, "user_id" = NULL, "project_id" = NULL '
+        'WHERE "tenant_id" IS NULL;' in sql
+    )

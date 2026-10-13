@@ -1,0 +1,9 @@
+ isolate_tenant_to_new_shard 
+-----------------------------
+                      102695
+(1 row)
+
+isolate seconds: 12.8
+shardid	nodename	shard_size
+102701	worker3	142090240
+(1 row)

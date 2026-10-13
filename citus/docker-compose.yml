@@ -1,0 +1,78 @@
+# Citus 14.2 on PostgreSQL 17: one coordinator, two workers, and a third that
+# joins later (`--profile scale`) so the rebalance can be measured under load.
+#
+# Lab-only auth: every node trusts the compose network so the coordinator can
+# reach the workers without a password file. Never copy that into production.
+name: ddl-citus
+
+x-citus: &citus
+  image: ${CITUS_IMAGE:-distributed-db-lab/citus:14.2.0-pg17}
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment:
+    POSTGRES_PASSWORD: lab-dev-only
+    POSTGRES_HOST_AUTH_METHOD: trust
+  command:
+    - postgres
+    - -c
+    - shared_preload_libraries=citus
+    - -c
+    - wal_level=logical          # non-blocking shard moves use logical replication
+    - -c
+    - max_connections=300
+    - -c
+    - shared_buffers=512MB
+    - -c
+    - citus.shard_count=32
+    - -c
+    - citus.node_conninfo=sslmode=prefer   # lab only: nodes have no certificates
+    - -c
+    # PostgreSQL 17.11 (Aug 2026) only allows listed logical-decoding output
+    # plugins; Citus's shard split and tenant isolation decode through `citus`
+    - output_plugin_libraries=pgoutput,test_decoding,citus
+  shm_size: 1g
+  healthcheck:
+    test: ["CMD", "pg_isready", "-U", "postgres"]
+    interval: 2s
+    timeout: 3s
+    retries: 30
+
+services:
+  coordinator:
+    <<: *citus
+    ports: ["5440:5432"]
+    volumes:
+      - ../data:/data:ro
+      - ./sql:/sql:ro
+  worker1:
+    <<: *citus
+  worker2:
+    <<: *citus
+  worker3:
+    <<: *citus
+    profiles: ["scale"]
+  pgbouncer:
+    image: edoburu/pgbouncer:v1.26.0-p0
+    profiles: ["pool"]
+    environment:
+      DB_HOST: coordinator
+      DB_USER: postgres
+      DB_PASSWORD: lab-dev-only
+      AUTH_TYPE: plain
+      POOL_MODE: transaction
+      DEFAULT_POOL_SIZE: "40"
+      MAX_CLIENT_CONN: "2000"
+    ports: ["6440:5432"]
+    depends_on:
+      coordinator:
+        condition: service_healthy
+  bench:
+    image: distributed-db-lab/bench:py3.12
+    build:
+      context: ../tools
+    profiles: ["tools"]
+    volumes:
+      - ..:/lab
+    working_dir: /lab
+    entrypoint: ["python"]

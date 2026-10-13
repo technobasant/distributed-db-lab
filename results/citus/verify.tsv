@@ -1,0 +1,20 @@
+table_name	citus_table_type	distribution_column	colocation_id	shard_count
+tenants	distributed	id	14	32
+users	distributed	tenant_id	14	32
+projects	distributed	tenant_id	14	32
+events	distributed	tenant_id	14	32
+orders	distributed	tenant_id	14	32
+"AuditLog"	distributed	TenantId	14	32
+webhooks	distributed	tenant_id	14	32
+webhook_deliveries	distributed	tenant_id	14	32
+plans	reference	<none>	13	1
+countries	reference	<none>	13	1
+(10 rows)
+t	count
+events	6000000
+events_null_tenant	30114
+users	200000
+orders	600000
+AuditLog	300000
+webhook_deliveries	500000
+(6 rows)

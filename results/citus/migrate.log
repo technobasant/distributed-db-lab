@@ -1,0 +1,160 @@
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.countries$$)
+ create_reference_table 
+------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.plans$$)
+ create_reference_table 
+------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.tenants$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public."AuditLog"$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.events$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.orders$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.projects$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.users$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.webhook_deliveries$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  Copying data from local table...
+NOTICE:  copying the data has completed
+DETAIL:  The local data in the table is no longer visible, but is still on disk.
+HINT:  To remove the local data, run: SELECT truncate_local_data_after_distributing_table($$public.webhooks$$)
+ create_distributed_table 
+--------------------------
+ 
+(1 row)
+
+NOTICE:  truncate cascades to table "users"
+NOTICE:  truncate cascades to table "events"
+NOTICE:  truncate cascades to table "orders"
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+NOTICE:  truncate cascades to table "tenants"
+NOTICE:  truncate cascades to table "users"
+NOTICE:  truncate cascades to table "projects"
+NOTICE:  truncate cascades to table "events"
+NOTICE:  truncate cascades to table "orders"
+NOTICE:  truncate cascades to table "webhooks"
+NOTICE:  truncate cascades to table "webhook_deliveries"
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+NOTICE:  truncate cascades to table "events"
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+NOTICE:  truncate cascades to table "users"
+NOTICE:  truncate cascades to table "projects"
+NOTICE:  truncate cascades to table "events"
+NOTICE:  truncate cascades to table "orders"
+NOTICE:  truncate cascades to table "webhooks"
+NOTICE:  truncate cascades to table "webhook_deliveries"
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+NOTICE:  truncate cascades to table "events"
+NOTICE:  truncate cascades to table "orders"
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
+NOTICE:  truncate cascades to table "webhook_deliveries"
+ truncate_local_data_after_distributing_table 
+----------------------------------------------
+ 
+(1 row)
+
