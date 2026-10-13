@@ -27,10 +27,6 @@ x-citus: &citus
     - citus.shard_count=32
     - -c
     - citus.node_conninfo=sslmode=prefer   # lab only: nodes have no certificates
-    - -c
-    # PostgreSQL 17.11 (Aug 2026) only allows listed logical-decoding output
-    # plugins; Citus's shard split and tenant isolation decode through `citus`
-    - output_plugin_libraries=pgoutput,test_decoding,citus
   shm_size: 1g
   healthcheck:
     test: ["CMD", "pg_isready", "-U", "postgres"]

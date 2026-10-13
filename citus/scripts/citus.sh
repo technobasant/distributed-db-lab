@@ -9,7 +9,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 COMPOSE=(docker compose -f citus/docker-compose.yml)
-OUT="results/citus"
+OUT="${OUT:-results/citus}"
 RAW="results/raw"
 PY="${PY:-.venv/bin/python}"
 # Benchmarks and the planner run in a container on the cluster's network: the
@@ -36,11 +36,26 @@ cmd_up() {
   wait_healthy coordinator worker1 worker2
 }
 
+# PostgreSQL 14.24/15.19/16.15/17.11/18.6 (Aug 2026) only allow logical
+# decoding through plugins listed in output_plugin_libraries, and Citus's shard
+# split and tenant isolation decode through `citus`. Older minors don't have
+# the setting at all, so apply it only where it exists. Note the bare list:
+# quoting the whole value stores it as one name and silently does nothing.
+allow_citus_decoder() {
+  "${COMPOSE[@]}" exec -T "$1" psql -U postgres -X -q <<'SQL' >/dev/null
+SELECT 'ALTER SYSTEM SET output_plugin_libraries = pgoutput, test_decoding, citus'
+WHERE EXISTS (SELECT 1 FROM pg_settings WHERE name = 'output_plugin_libraries') \gexec
+SELECT pg_reload_conf();
+SQL
+}
+
 cmd_cluster() {
   # the extension must exist on a worker before the coordinator registers it
   for w in worker1 worker2; do
     "${COMPOSE[@]}" exec -T "$w" psql -U postgres -X -c "CREATE EXTENSION IF NOT EXISTS citus;" >/dev/null
+    allow_citus_decoder "$w"
   done
+  allow_citus_decoder coordinator
   psql_c <<'SQL'
 CREATE EXTENSION IF NOT EXISTS citus;
 SELECT citus_set_coordinator_host('coordinator', 5432);
@@ -152,6 +167,7 @@ cmd_rebalance() {
   "${COMPOSE[@]}" --profile scale up -d worker3
   wait_healthy worker3
   "${COMPOSE[@]}" exec -T worker3 psql -U postgres -X -c "CREATE EXTENSION IF NOT EXISTS citus;" >/dev/null
+  allow_citus_decoder worker3
   shard_sizes > "$OUT/rebalance-before.tsv"
   psql_c -c "SELECT citus_add_node('worker3', 5432) WHERE NOT EXISTS
              (SELECT 1 FROM pg_dist_node WHERE nodename = 'worker3');"

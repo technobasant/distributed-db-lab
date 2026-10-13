@@ -11,3 +11,6 @@ results/raw/
 
 # local overrides
 .env
+
+# CI smoke-test output
+results/ci-smoke/
