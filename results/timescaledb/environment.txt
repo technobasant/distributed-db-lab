@@ -1,0 +1,7 @@
+date_utc: 2026-10-13T06:13:29Z
+image: timescale/timescaledb@sha256:b346edcdb51a1fd6020e3965e0bd1c9f3406fa6d5fbce1e28f4852587ef934e2
+timescaledb: 2.30.2
+postgres: 17.11
+license: timescale
+rows: 20,736,000 ticks (100 entities x 2 metrics, 10 s step, 12 days)
+host_load_at_end: 11.47 14.30 17.71

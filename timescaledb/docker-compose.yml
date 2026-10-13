@@ -1,0 +1,43 @@
+# TimescaleDB 2.30 on PostgreSQL 17, single node. Multi-node was removed in
+# 2.14, so there is no distributed Timescale to build; scale-out in this lab is
+# the Citus part. The non-oss image is used because compression (columnstore)
+# and continuous aggregates are under the Timescale License, not Apache-2.
+name: ddl-tsdb
+
+services:
+  tsdb:
+    image: timescale/timescaledb:2.30.2-pg17
+    environment:
+      POSTGRES_PASSWORD: lab-dev-only
+      TIMESCALEDB_TELEMETRY: "off"
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=timescaledb
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - max_wal_size=8GB
+      - -c
+      - autovacuum_naptime=5s        # lab only: make autovacuum timing observable
+      - -c
+      - timescaledb.telemetry_level=off
+    shm_size: 1g
+    ports: ["5441:5432"]
+    volumes:
+      - ../data:/data:ro
+      - ./sql:/sql:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  bench:
+    image: distributed-db-lab/bench:py3.12
+    build:
+      context: ../tools
+    profiles: ["tools"]
+    volumes:
+      - ..:/lab
+    working_dir: /lab
+    entrypoint: ["python"]

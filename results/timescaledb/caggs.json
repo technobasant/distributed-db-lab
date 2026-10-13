@@ -1,0 +1,22 @@
+{"daily_candles_from_raw":
+{
+  "n": 30,
+  "p50": 15.298,
+  "p95": 23.994,
+  "p99": 29.03,
+  "mean": 16.125,
+  "min": 10.554,
+  "max": 31.019
+}
+, "daily_candles_from_cagg":
+{
+  "n": 30,
+  "p50": 0.157,
+  "p95": 0.332,
+  "p99": 0.417,
+  "mean": 0.184,
+  "min": 0.103,
+  "max": 0.436
+}
+, "build_seconds_all_three": 14.0
+}

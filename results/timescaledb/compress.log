@@ -1,0 +1,15 @@
+Timing is on.
+ALTER TABLE
+Time: 12.233 ms
+ count 
+-------
+    11
+(1 row)
+
+Time: 17076.245 ms (00:17.076)
+ before  | after  | before_bytes | after_bytes | ratio | number_compressed_chunks | total_chunks 
+---------+--------+--------------+-------------+-------+--------------------------+--------------
+ 2656 MB | 156 MB |   2785452032 |   163373056 |  17.0 |                       11 |           12
+(1 row)
+
+Time: 12.761 ms

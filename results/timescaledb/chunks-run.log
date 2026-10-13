@@ -1,0 +1,51 @@
+Timing is on.
+psql:/sql/03-chunk-intervals.sql:4: NOTICE:  table "ticks_1h" does not exist, skipping
+psql:/sql/03-chunk-intervals.sql:4: NOTICE:  table "ticks_7d" does not exist, skipping
+DROP TABLE
+Time: 6.727 ms
+CREATE TABLE
+Time: 21.778 ms
+CREATE TABLE
+Time: 2.682 ms
+ create_hypertable 
+-------------------
+ (3,t)
+(1 row)
+
+Time: 7.764 ms
+ create_hypertable 
+-------------------
+ (4,t)
+(1 row)
+
+Time: 1.222 ms
+== INSERT 1-hour chunks
+INSERT 0 20736000
+Time: 104468.856 ms (01:44.469)
+== INSERT 7-day chunks
+INSERT 0 20736000
+Time: 94344.467 ms (01:34.344)
+VACUUM
+Time: 10104.338 ms (00:10.104)
+VACUUM
+Time: 3198.920 ms (00:03.199)
+   hypertable    | chunks |  size   
+-----------------+--------+---------
+ ticks_1h        |    288 | 2819 MB
+ ticks_entity_pk |     12 | 2898 MB
+ ticks_7d        |      3 | 2902 MB
+(3 rows)
+
+Time: 208.190 ms
+ Container ddl-tsdb-bench-run-8498754e3f95 Creating 
+ Container ddl-tsdb-bench-run-8498754e3f95 Created 
+ Container ddl-tsdb-bench-run-369907c6bd7a Creating 
+ Container ddl-tsdb-bench-run-369907c6bd7a Created 
+ Container ddl-tsdb-bench-run-0ab74a07f74d Creating 
+ Container ddl-tsdb-bench-run-0ab74a07f74d Created 
+ Container ddl-tsdb-bench-run-c4ddca46e809 Creating 
+ Container ddl-tsdb-bench-run-c4ddca46e809 Created 
+ Container ddl-tsdb-bench-run-9649b162b00c Creating 
+ Container ddl-tsdb-bench-run-9649b162b00c Created 
+ Container ddl-tsdb-bench-run-97a9e1c23179 Creating 
+ Container ddl-tsdb-bench-run-97a9e1c23179 Created 

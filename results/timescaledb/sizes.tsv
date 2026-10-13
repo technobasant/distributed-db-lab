@@ -1,0 +1,4 @@
+hypertable	table_bytes	index_bytes	total_bytes	index_to_heap	chunks
+ticks_time_pk	1249738752	1137197056	2387042304	0.91	12
+ticks_entity_pk	1252687872	1785905152	3038699520	1.43	12
+(2 rows)

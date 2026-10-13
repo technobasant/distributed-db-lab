@@ -1,0 +1,22 @@
+ Container ddl-tsdb-bench-run-baf8b5426ab2 Creating 
+ Container ddl-tsdb-bench-run-baf8b5426ab2 Created 
+ Container ddl-tsdb-bench-run-4a23eb4db306 Creating 
+ Container ddl-tsdb-bench-run-4a23eb4db306 Created 
+ Container ddl-tsdb-bench-run-eccb177dc798 Creating 
+ Container ddl-tsdb-bench-run-eccb177dc798 Created 
+ Container ddl-tsdb-bench-run-1bc94bfdc437 Creating 
+ Container ddl-tsdb-bench-run-1bc94bfdc437 Created 
+ Container ddl-tsdb-bench-run-e1c2f78ccc41 Creating 
+ Container ddl-tsdb-bench-run-e1c2f78ccc41 Created 
+ Container ddl-tsdb-bench-run-5eeb347e7346 Creating 
+ Container ddl-tsdb-bench-run-5eeb347e7346 Created 
+CREATE INDEX
+VACUUM
+ Container ddl-tsdb-bench-run-29aef8f6a6c2 Creating 
+ Container ddl-tsdb-bench-run-29aef8f6a6c2 Created 
+ Container ddl-tsdb-bench-run-3046976128e7 Creating 
+ Container ddl-tsdb-bench-run-3046976128e7 Created 
+hypertable	table_bytes	index_bytes	total_bytes	index_to_heap	chunks
+ticks_time_pk	1249738752	1979572224	3229417472	1.58	12
+ticks_entity_pk	1252687872	1785905152	3038699520	1.43	12
+(2 rows)

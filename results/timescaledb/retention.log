@@ -1,0 +1,29 @@
+Timing is on.
+          what          | count 
+------------------------+-------
+ raw_chunks_before      |    12
+ candles_1d_rows_before |  1200
+(2 rows)
+
+Time: 11.008 ms
+Time: 5.364 ms
+ dropped 
+---------
+       9
+(1 row)
+
+Time: 79.086 ms
+             what              | count 
+-------------------------------+-------
+ raw_chunks_after              |     3
+ candles_1d_rows_after         |  1200
+ candles_1d_days_before_cutoff |   900
+(3 rows)
+
+Time: 1.482 ms
+ delete_job 
+------------
+ 
+(1 row)
+
+Time: 1.968 ms

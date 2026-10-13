@@ -1,0 +1,41 @@
+Timing is on.
+psql:/sql/05-caggs.sql:5: NOTICE:  materialized view "candles_1d" does not exist, skipping
+psql:/sql/05-caggs.sql:5: NOTICE:  materialized view "candles_1h" does not exist, skipping
+psql:/sql/05-caggs.sql:5: NOTICE:  materialized view "candles_1m" does not exist, skipping
+DROP MATERIALIZED VIEW
+Time: 7.622 ms
+CREATE MATERIALIZED VIEW
+Time: 42.208 ms
+CREATE MATERIALIZED VIEW
+Time: 5.368 ms
+CREATE MATERIALIZED VIEW
+Time: 3.460 ms
+== refresh 1m from raw
+CALL
+Time: 12469.787 ms (00:12.470)
+== refresh 1h from 1m
+CALL
+Time: 848.746 ms
+== refresh 1d from 1h
+CALL
+Time: 18.825 ms
+    view    |  count  
+------------+---------
+ candles_1m | 1728000
+ candles_1h |   28800
+ candles_1d |    1200
+(3 rows)
+
+Time: 33.209 ms
+ entity_id |   bucket   | matches_raw 
+-----------+------------+-------------
+         7 | 2026-07-01 | t
+         7 | 2026-07-02 | t
+         7 | 2026-07-03 | t
+(3 rows)
+
+Time: 52.814 ms
+ Container ddl-tsdb-bench-run-66f90260262a Creating 
+ Container ddl-tsdb-bench-run-66f90260262a Created 
+ Container ddl-tsdb-bench-run-b2010dbaf4f8 Creating 
+ Container ddl-tsdb-bench-run-b2010dbaf4f8 Created 

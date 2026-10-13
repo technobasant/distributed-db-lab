@@ -1,0 +1,103 @@
+Timing is on.
+psql:/sql/07-insert-only-vacuum.sql:11: NOTICE:  table "readings" does not exist, skipping
+DROP TABLE
+Time: 7.434 ms
+CREATE TABLE
+Time: 9.770 ms
+CREATE INDEX
+Time: 3.057 ms
+INSERT 0 5000000
+Time: 10128.521 ms (00:10.129)
+ANALYZE
+Time: 505.124 ms
+== fraction of pages all-visible before VACUUM
+ relpages | relallvisible | all_visible 
+----------+---------------+-------------
+    36765 |             0 |       0.000
+(1 row)
+
+Time: 2.448 ms
+== index-only scan before VACUUM (watch Heap Fetches)
+                                              QUERY PLAN                                               
+-------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on readings (actual time=5.368..86.635 rows=33584 loops=1)
+   Recheck Cond: ((entity_id = 42) AND (ts >= '2026-07-20 00:00:00+00'::timestamp with time zone))
+   Heap Blocks: exact=24695
+   Buffers: shared hit=24827
+   ->  Bitmap Index Scan on readings_entity_ts (actual time=3.508..3.508 rows=33584 loops=1)
+         Index Cond: ((entity_id = 42) AND (ts >= '2026-07-20 00:00:00+00'::timestamp with time zone))
+         Buffers: shared hit=132
+ Planning:
+   Buffers: shared hit=28
+ Planning Time: 0.145 ms
+ Execution Time: 87.965 ms
+(11 rows)
+
+Time: 89.000 ms
+VACUUM
+Time: 262.871 ms
+== after VACUUM
+ relpages | relallvisible | all_visible 
+----------+---------------+-------------
+    36765 |         36765 |       1.000
+(1 row)
+
+Time: 0.718 ms
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Index Only Scan using readings_entity_ts on readings (actual time=0.044..1.847 rows=33584 loops=1)
+   Index Cond: ((entity_id = 42) AND (ts >= '2026-07-20 00:00:00+00'::timestamp with time zone))
+   Heap Fetches: 0
+   Buffers: shared hit=134
+ Planning:
+   Buffers: shared hit=7
+ Planning Time: 0.119 ms
+ Execution Time: 2.547 ms
+(8 rows)
+
+Time: 2.978 ms
+== insert-triggered autovacuum: default scale factor vs a per-table override
+ALTER TABLE
+Time: 1.811 ms
+ pg_stat_reset_single_table_counters 
+-------------------------------------
+ 
+(1 row)
+
+Time: 0.772 ms
+INSERT 0 500000
+Time: 1017.223 ms (00:01.017)
+ pg_sleep 
+----------
+ 
+(1 row)
+
+Time: 20026.080 ms (00:20.026)
+   setting   | n_ins_since_vacuum | autovacuumed 
+-------------+--------------------+--------------
+ default 0.2 |             500000 | f
+(1 row)
+
+Time: 21.274 ms
+ALTER TABLE
+Time: 1.502 ms
+INSERT 0 500000
+Time: 1206.455 ms (00:01.206)
+ pg_sleep 
+----------
+ 
+(1 row)
+
+Time: 20006.277 ms (00:20.006)
+    setting     | n_ins_since_vacuum | autovacuumed 
+----------------+--------------------+--------------
+ per-table 0.01 |                  0 | t
+(1 row)
+
+Time: 3.505 ms
+ relpages | relallvisible | all_visible 
+----------+---------------+-------------
+    44118 |         44118 |       1.000
+(1 row)
+
+Time: 0.476 ms
