@@ -1,0 +1,27 @@
+[project]
+name = "distributed-db-lab"
+version = "0.1.0"
+description = "Horizontal scale-out of Postgres with Citus, time-series with TimescaleDB, and a replicated ClickHouse cluster — on one laptop, measured."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Basant Bhattarai" }]
+requires-python = ">=3.11"
+dependencies = [
+    "psycopg[binary]>=3.2",
+    "numpy>=2.0",
+    "httpx>=0.27",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

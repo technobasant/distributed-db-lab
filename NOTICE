@@ -1,0 +1,10 @@
+distributed-db-lab
+Copyright 2026 Basant Bhattarai
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It runs, but does not redistribute, third-party software through container
+images: PostgreSQL, Citus (built from the citusdata/citus v14.2.0 source tag),
+TimescaleDB (Timescale License for compression and continuous aggregates),
+ClickHouse and ClickHouse Keeper, and PgBouncer. Each is subject to its own
+licence.
