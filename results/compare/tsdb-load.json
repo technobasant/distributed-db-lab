@@ -1,0 +1,10 @@
+{
+  "engine": "tsdb",
+  "copy_seconds": 30.2,
+  "compress_seconds": 20.7,
+  "index_seconds": null,
+  "script_seconds": 51.8,
+  "bytes": 139476992,
+  "ingest_rows_per_s": 331126,
+  "note": "compress_seconds read from the compress_chunk statement's timing in tsdb-load.log; the script's parser took the preceding ALTER TABLE (3 ms) by mistake"
+}

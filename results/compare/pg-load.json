@@ -1,0 +1,9 @@
+{
+  "engine": "pg",
+  "copy_seconds": 13.8,
+  "compress_seconds": null,
+  "index_seconds": 9.4,
+  "script_seconds": 26.6,
+  "bytes": 1157693440,
+  "ingest_rows_per_s": 724638
+}

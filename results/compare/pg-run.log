@@ -1,0 +1,55 @@
+ Image postgres:17-bookworm Pulling 
+ c75f989a229d Already exists 0B
+ 59a89a4a1906 Already exists 0B
+ d0d5064f7db6 Already exists 0B
+ 25b5ebe98976 Already exists 0B
+ ba11d3da82ae Already exists 0B
+ a606318a56d8 Already exists 0B
+ d67549baeeb9 Already exists 0B
+ 4643a0d2bc9a Already exists 0B
+ 4748d3f27fc2 Already exists 0B
+ 1e59678344bf Already exists 0B
+ 33cdf0532a6a Already exists 0B
+ 9be6a8c44616 Already exists 0B
+ 3211c9ff14a3 Already exists 0B
+ 1bee21526d9d Already exists 0B
+ Image postgres:17-bookworm Pulled 
+ Network ddl-compare_default Creating 
+ Network ddl-compare_default Creating 
+ Network ddl-compare_default Created 
+ Network ddl-compare_default Created 
+ Container ddl-compare-pg-1 Creating 
+ Container ddl-compare-pg-1 Created 
+ Container ddl-compare-pg-1 Starting 
+ Container ddl-compare-pg-1 Started 
+ Container ddl-compare-bench-run-833f0e05d7ce Creating 
+ Container ddl-compare-bench-run-833f0e05d7ce Created 
+ Container ddl-compare-pg-1 Restarting 
+ Container ddl-compare-pg-1 Started 
+ Container ddl-compare-bench-run-a6e17e8258f3 Creating 
+ Container ddl-compare-bench-run-a6e17e8258f3 Created 
+ Container ddl-compare-bench-run-5e03e69ceeef Creating 
+ Container ddl-compare-bench-run-5e03e69ceeef Created 
+ Container ddl-compare-pg-1 Restarting 
+ Container ddl-compare-pg-1 Started 
+ Container ddl-compare-bench-run-3935569005c7 Creating 
+ Container ddl-compare-bench-run-3935569005c7 Created 
+ Container ddl-compare-bench-run-50bce59e9a5e Creating 
+ Container ddl-compare-bench-run-50bce59e9a5e Created 
+ Container ddl-compare-pg-1 Restarting 
+ Container ddl-compare-pg-1 Started 
+ Container ddl-compare-bench-run-599fa3e43ac9 Creating 
+ Container ddl-compare-bench-run-599fa3e43ac9 Created 
+ Container ddl-compare-bench-run-5ff23ed0330c Creating 
+ Container ddl-compare-bench-run-5ff23ed0330c Created 
+ Container ddl-compare-pg-1 Restarting 
+ Container ddl-compare-pg-1 Started 
+ Container ddl-compare-bench-run-bac645e5df9f Creating 
+ Container ddl-compare-bench-run-bac645e5df9f Created 
+{"engine": "pg", "copy_seconds": 13.8, "compress_seconds": null, "index_seconds": 9.4, "script_seconds": 26.6, "bytes": 1157693440, "ingest_rows_per_s": 724638}
+ Container ddl-compare-pg-1 Stopping 
+ Container ddl-compare-pg-1 Stopped 
+ Container ddl-compare-pg-1 Removing 
+ Container ddl-compare-pg-1 Removed 
+ Network ddl-compare_default Removing 
+ Network ddl-compare_default Removed 

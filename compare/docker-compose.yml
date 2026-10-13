@@ -1,0 +1,48 @@
+# One dataset, four single-node engines, run one at a time (one profile each)
+# with the same 2 GB buffer budget where the engine has one.
+name: ddl-compare
+
+x-pg-env: &pg-env
+  POSTGRES_PASSWORD: lab-dev-only
+
+services:
+  pg:
+    image: postgres:17-bookworm
+    profiles: ["pg"]
+    environment: *pg-env
+    command: ["postgres", "-c", "shared_buffers=2GB", "-c", "max_wal_size=8GB", "-c", "work_mem=64MB"]
+    shm_size: 1g
+    volumes: ["../data:/data:ro", "./sql:/sql:ro"]
+    healthcheck: { test: ["CMD", "pg_isready", "-U", "postgres"], interval: 2s, retries: 30 }
+  citus:
+    image: ${CITUS_IMAGE:-distributed-db-lab/citus:14.2.0-pg17}
+    profiles: ["citus"]
+    environment: *pg-env
+    command: ["postgres", "-c", "shared_preload_libraries=citus", "-c", "shared_buffers=2GB",
+              "-c", "max_wal_size=8GB", "-c", "work_mem=64MB"]
+    shm_size: 1g
+    volumes: ["../data:/data:ro", "./sql:/sql:ro"]
+    healthcheck: { test: ["CMD", "pg_isready", "-U", "postgres"], interval: 2s, retries: 30 }
+  tsdb:
+    image: timescale/timescaledb:2.30.2-pg17
+    profiles: ["tsdb"]
+    environment: { POSTGRES_PASSWORD: lab-dev-only, TIMESCALEDB_TELEMETRY: "off" }
+    command: ["postgres", "-c", "shared_preload_libraries=timescaledb", "-c", "shared_buffers=2GB",
+              "-c", "max_wal_size=8GB", "-c", "work_mem=64MB", "-c", "timescaledb.telemetry_level=off"]
+    shm_size: 1g
+    volumes: ["../data:/data:ro", "./sql:/sql:ro"]
+    healthcheck: { test: ["CMD", "pg_isready", "-U", "postgres"], interval: 2s, retries: 30 }
+  ch:
+    image: clickhouse/clickhouse-server:25.8.33.6
+    profiles: ["ch"]
+    environment: { CLICKHOUSE_SKIP_USER_SETUP: "1" }
+    ulimits: { nofile: { soft: 262144, hard: 262144 } }
+    volumes: ["../data:/data:ro", "./sql:/sql:ro"]
+    healthcheck: { test: ["CMD", "clickhouse-client", "--query", "SELECT 1"], interval: 2s, retries: 40 }
+  bench:
+    image: distributed-db-lab/bench:py3.12
+    build: { context: ../tools }
+    profiles: ["tools"]
+    volumes: ["..:/lab"]
+    working_dir: /lab
+    entrypoint: ["python"]

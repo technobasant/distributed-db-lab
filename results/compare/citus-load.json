@@ -1,0 +1,9 @@
+{
+  "engine": "citus",
+  "copy_seconds": 8.7,
+  "compress_seconds": null,
+  "index_seconds": null,
+  "script_seconds": 10.3,
+  "bytes": 123609088,
+  "ingest_rows_per_s": 1149425
+}

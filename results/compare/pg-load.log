@@ -1,0 +1,23 @@
+Timing is on.
+CREATE TABLE
+Time: 3.353 ms
+CREATE TABLE
+Time: 3.877 ms
+CREATE TABLE
+Time: 1.783 ms
+CREATE TABLE
+Time: 1.088 ms
+== ingest
+COPY 10000000
+Time: 13841.499 ms (00:13.841)
+== index
+CREATE INDEX
+Time: 9359.249 ms (00:09.359)
+VACUUM
+Time: 3037.813 ms (00:03.038)
+   bytes    
+------------
+ 1157693440
+(1 row)
+
+Time: 2.877 ms

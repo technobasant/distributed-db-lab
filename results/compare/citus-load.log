@@ -1,0 +1,18 @@
+Timing is on.
+CREATE EXTENSION
+Time: 282.264 ms
+CREATE EXTENSION
+Time: 10.098 ms
+CREATE TABLE
+Time: 2.042 ms
+== ingest
+COPY 10000000
+Time: 8662.774 ms (00:08.663)
+VACUUM
+Time: 1086.980 ms (00:01.087)
+   bytes   
+-----------
+ 123609088
+(1 row)
+
+Time: 0.615 ms

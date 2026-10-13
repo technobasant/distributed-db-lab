@@ -1,0 +1,32 @@
+Timing is on.
+CREATE EXTENSION
+psql:/sql/tsdb.sql:4: NOTICE:  extension "timescaledb" already exists, skipping
+Time: 2.937 ms
+CREATE TABLE
+Time: 4.874 ms
+ create_hypertable 
+-------------------
+ (1,t)
+(1 row)
+
+Time: 2.971 ms
+== ingest
+COPY 10000000
+Time: 30162.776 ms (00:30.163)
+== compress
+ALTER TABLE
+Time: 3.343 ms
+ count 
+-------
+    14
+(1 row)
+
+Time: 20729.468 ms (00:20.729)
+VACUUM
+Time: 577.911 ms
+   bytes   
+-----------
+ 139476992
+(1 row)
+
+Time: 29.160 ms
