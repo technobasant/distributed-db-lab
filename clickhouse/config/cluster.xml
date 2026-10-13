@@ -1,0 +1,28 @@
+<clickhouse>
+    <!-- 2 shards x 2 replicas. internal_replication: a Distributed insert writes
+         one replica per shard and ReplicatedMergeTree copies it to the other. -->
+    <remote_servers replace="true">
+        <lab>
+            <shard>
+                <internal_replication>true</internal_replication>
+                <replica><host>ch-s1r1</host><port>9000</port></replica>
+                <replica><host>ch-s1r2</host><port>9000</port></replica>
+            </shard>
+            <shard>
+                <internal_replication>true</internal_replication>
+                <replica><host>ch-s2r1</host><port>9000</port></replica>
+                <replica><host>ch-s2r2</host><port>9000</port></replica>
+            </shard>
+        </lab>
+    </remote_servers>
+
+    <zookeeper>
+        <node><host>keeper</host><port>9181</port></node>
+    </zookeeper>
+
+    <distributed_ddl><path>/clickhouse/task_queue/ddl</path></distributed_ddl>
+
+    <listen_host>0.0.0.0</listen_host>
+    <logger><level>warning</level><console>1</console></logger>
+    <!-- query_log stays on: read_rows per query is part of the evidence -->
+</clickhouse>

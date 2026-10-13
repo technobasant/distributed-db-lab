@@ -1,0 +1,3 @@
+table	parts_written	merges	rows_written
+parts_async	37	7	300000
+parts_sync	300	208	300000

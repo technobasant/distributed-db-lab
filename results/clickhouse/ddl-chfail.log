@@ -1,0 +1,12 @@
+ Container ddl-ch-ch-s1r2-1 Killing 
+ Container ddl-ch-ch-s1r2-1 Killed 
+ Container ddl-ch-bench-run-c74c18dd0ced Creating 
+ Container ddl-ch-bench-run-c74c18dd0ced Created 
+ Container ddl-ch-ch-s1r2-1 Starting 
+ Container ddl-ch-ch-s1r2-1 Started 
+{"rows_before": 10000000, "rows_after": 13950848,
+ "inserts": {"inserts_ok": 40, "inserts_failed": 0},
+ "replica_down_seconds": 2.2,
+ "restart_to_serving_seconds": 1.9,
+ "serving_to_caught_up_seconds": 0.8,
+ "s1r1_rows": 7831353, "s1r2_rows": 7831353}

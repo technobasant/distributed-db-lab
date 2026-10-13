@@ -1,0 +1,56 @@
+# ClickHouse 25.8 LTS: 2 shards x 2 replicas coordinated by ClickHouse Keeper.
+# Lab-only auth: CLICKHOUSE_SKIP_USER_SETUP leaves the default user without a
+# password and reachable on the compose network. Never do that in production.
+name: ddl-ch
+
+x-ch: &ch
+  image: clickhouse/clickhouse-server:25.8.33.6
+  environment:
+    CLICKHOUSE_SKIP_USER_SETUP: "1"
+  ulimits:
+    nofile: { soft: 262144, hard: 262144 }
+  depends_on: [keeper]
+  healthcheck:
+    test: ["CMD", "clickhouse-client", "--query", "SELECT 1"]
+    interval: 2s
+    timeout: 3s
+    retries: 40
+
+services:
+  keeper:
+    image: clickhouse/clickhouse-keeper:25.8.33.6
+    volumes:
+      - ./config/keeper.xml:/etc/clickhouse-keeper/keeper_config.d/lab.xml:ro
+  ch-s1r1:
+    <<: *ch
+    # no host port: the bench client runs on the compose network, and a fixed
+    # 8123 on the host collides with any other ClickHouse already running
+    volumes:
+      - ./config/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml:ro
+      - ./config/macros-s1r1.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+      - ../data:/data:ro
+      - ./sql:/sql:ro
+  ch-s1r2:
+    <<: *ch
+    volumes:
+      - ./config/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml:ro
+      - ./config/macros-s1r2.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+  ch-s2r1:
+    <<: *ch
+    volumes:
+      - ./config/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml:ro
+      - ./config/macros-s2r1.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+  ch-s2r2:
+    <<: *ch
+    volumes:
+      - ./config/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml:ro
+      - ./config/macros-s2r2.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+  bench:
+    image: distributed-db-lab/bench:py3.12
+    build:
+      context: ../tools
+    profiles: ["tools"]
+    volumes:
+      - ..:/lab
+    working_dir: /lab
+    entrypoint: ["python"]

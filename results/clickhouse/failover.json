@@ -1,0 +1,7 @@
+{"rows_before": 13950848, "rows_after": 15950848, "rows_expected_after": 15950848,
+ "inserts": {"inserts_ok": 40, "inserts_failed": 0},
+ "replica_down_seconds": 60.3,
+ "rows_replica_missed_while_down": 1452437,
+ "restart_to_serving_seconds": 3.5,
+ "serving_to_caught_up_seconds": 0.8,
+ "s1r1_rows": 9283790, "s1r2_rows": 9283790}

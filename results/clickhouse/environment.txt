@@ -1,0 +1,8 @@
+date_utc: 2026-10-13T06:23:25Z
+server_image: clickhouse/clickhouse-server@sha256:0152dd511befe6a2c2ef53e930726179669b08116da78500b37c51c96ff5ee77
+keeper_image: clickhouse/clickhouse-keeper@sha256:86ef98ab9c41998c562806a062ef1079af07755f6bcec0a46e9caa9b7a4b4253
+version: 25.8.33.6
+topology: 2 shards x 2 replicas, 1 Keeper node, Distributed sharding key intHash64(tenant_id)
+rows: 10,000,000 events (seeded), then +3,950,848 from the first failover attempt and +2,000,000 from the second
+parallel_distributed_insert_select default: 2 (changed from 0 in 25.7, per system.settings_changes)
+host_load_at_end: 10.69 15.52 17.00

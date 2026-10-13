@@ -1,0 +1,48 @@
+ch-s1r2	9000	0		3	0
+ch-s2r1	9000	0		2	0
+ch-s1r1	9000	0		1	0
+ch-s2r2	9000	0		0	0
+ch-s2r2	9000	0		3	0
+ch-s2r1	9000	0		2	0
+ch-s1r2	9000	0		1	0
+ch-s1r1	9000	0		0	0
+ch-s1r1	9000	0		3	0
+ch-s2r1	9000	0		2	0
+ch-s1r2	9000	0		1	0
+ch-s2r2	9000	0		0	0
+ch-s2r1	9000	0		3	0
+ch-s1r1	9000	0		2	0
+ch-s1r2	9000	0		1	0
+ch-s2r2	9000	0		0	0
+ch-s2r2	9000	0		3	2
+ch-s2r1	9000	0		2	2
+ch-s1r1	9000	0		1	0
+ch-s1r2	9000	0		0	0
+ch-s2r2	9000	0		3	0
+ch-s2r1	9000	0		2	0
+ch-s1r2	9000	0		1	0
+ch-s1r1	9000	0		0	0
+ch-s1r2	9000	0		3	2
+ch-s1r1	9000	0		2	2
+ch-s2r2	9000	0		1	0
+ch-s2r1	9000	0		0	0
+table	rows	compressed	uncompressed	on_disk	ratio
+events_local	10000000	122700467	221858202	122733998	1.81
+events_str_local	10000000	128604388	314327571	128641720	2.44
+events_ts_local	10000000	154274308	221867281	154306838	1.44
+table	column	compressed
+events_local	country	10055532
+events_str_local	country	15521907
+events_local	event_type	294552
+events_str_local	event_type	732075
+ Container ddl-ch-bench-run-7e3aa73844bb Creating 
+ Container ddl-ch-bench-run-7e3aa73844bb Created 
+ Container ddl-ch-bench-run-7bc6934e667b Creating 
+ Container ddl-ch-bench-run-7bc6934e667b Created 
+ Container ddl-ch-bench-run-4d98003f558f Creating 
+ Container ddl-ch-bench-run-4d98003f558f Created 
+ Container ddl-ch-bench-run-155d0952393a Creating 
+ Container ddl-ch-bench-run-155d0952393a Created 
+log_comment	rows_read_on_shards
+readrows_events	49152
+readrows_events_ts	4168647

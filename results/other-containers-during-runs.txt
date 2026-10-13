@@ -1,0 +1,13 @@
+realestate_celery_beat
+realestate_nginx
+realestate_backend
+realestate_celery_worker
+easy_doctor_mrs-web-1
+earshot-omniroute
+easy_doctor_mrs-worker-1
+easy_doctor_mrs-api-1
+easy_doctor_mrs-cloudflared-1
+easy_doctor_mrs-db-1
+realestate_postgres
+realestate_clickhouse
+realestate_redis

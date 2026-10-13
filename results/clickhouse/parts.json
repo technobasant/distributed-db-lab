@@ -1,0 +1,4 @@
+{"inserts": 300, "rows_per_insert": 1000,
+ "sync_seconds": 8.4, "async_seconds": 8.0,
+ "rows_sync": 300000,
+ "rows_async": 300000}
