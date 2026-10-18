@@ -1,13 +1,8 @@
-realestate_celery_beat
-realestate_nginx
-realestate_backend
-realestate_celery_worker
-easy_doctor_mrs-web-1
-earshot-omniroute
-easy_doctor_mrs-worker-1
-easy_doctor_mrs-api-1
-easy_doctor_mrs-cloudflared-1
-easy_doctor_mrs-db-1
-realestate_postgres
-realestate_clickhouse
-realestate_redis
+# Containers from other projects that were running, idle, in the same Docker VM
+# during these runs. Project names are withheld; what matters for the figures is
+# that 13 unrelated containers shared the VM.
+#
+# a web application stack (7): backend, nginx, celery worker, celery beat,
+#   PostgreSQL, ClickHouse, Redis
+# a document-processing stack (5): web, api, worker, database, tunnel
+# a gateway (1)
