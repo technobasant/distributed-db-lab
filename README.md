@@ -6,7 +6,7 @@ Scaling PostgreSQL out with Citus, time-series at scale with TimescaleDB, and a 
 
 Horizontal scale is usually sold as a topology diagram: add nodes, data spreads, queries get faster. What actually decides whether it works is less photogenic — which key every table carries, which constraints have to change before the first table can be distributed, what a rebalance does to the latency of the writes that keep arriving, and what to do about the one customer whose data is seven times the size of everyone else's.
 
-This lab rebuilds, from scratch and on synthetic data, the patterns I worked through on client engagements: a warehouse migrated table by table onto Citus, and an audit of a multi-terabyte TimescaleDB hypertable whose index outweighed its data. No client code, schema or figures are in here — every number below was measured on this rig and is in [MEASUREMENTS.md](MEASUREMENTS.md) with its method and the file it came from.
+This lab rebuilds, from scratch and on generated data, the patterns I worked through on client engagements: a warehouse migrated table by table onto Citus, and an audit of a multi-terabyte TimescaleDB hypertable whose index outweighed its data. No client code, schema or figures are in here — every number below was measured on this rig and is in [MEASUREMENTS.md](MEASUREMENTS.md) with its method and the file it came from.
 
 Citus has been part of my work since 2021; [citusdata/citus#4776](https://github.com/citusdata/citus/issues/4776) is a report of mine from then — adding a constraint without a name to a distributed table failed — which Citus's maintainers fixed by adding unnamed-constraint support in January 2023.
 
@@ -62,7 +62,7 @@ Docker with at least 8 CPUs and 12 GB for the VM, [uv](https://docs.astral.sh/uv
 
 ```bash
 make setup          # uv venv + dependencies
-make data           # ~2.5 GB of seeded CSV under data/ (git-ignored)
+make data           # ~2.5 GB of generated CSV (fixed seed) under data/ (git-ignored)
 make citus          # cluster, naive attempt, plan, migrate, queries, rebalance, skew
 make tsdb           # key order, chunks, columnstore, candles, retention, vacuum
 make ch             # cluster, load, sort-key variants, rollup, parts, replica outage
@@ -167,7 +167,7 @@ These cost more time than everything that worked, and none of them came with an 
 ## Limits
 
 - **One host, and not a quiet one.** Every node is its own container on the same machine; load average 10–44 during the runs; medians are the figures to trust, small differences are not findings. See MEASUREMENTS.md.
-- **Synthetic data.** Seeded and shaped on purpose — Zipf tenants, a 15% whale, time-ordered arrival — but synthetic.
+- **Generated data.** Reproducible and shaped on purpose — Zipf tenants, a 15% whale, time-ordered arrival — but generated, not captured from production.
 - **Docker networking and one VM.** No real network between nodes, so no partitions, and latency between "nodes" is loopback.
 - **One ClickHouse Keeper.** Enough to coordinate replication, not a quorum.
 - **Cold is VM-cold.** The VM's page cache is dropped; macOS may still cache the disk image.
