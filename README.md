@@ -6,7 +6,7 @@ Scaling PostgreSQL out with Citus, time-series at scale with TimescaleDB, and a 
 
 Horizontal scale is usually sold as a topology diagram: add nodes, data spreads, queries get faster. What actually decides whether it works is less photogenic — which key every table carries, which constraints have to change before the first table can be distributed, what a rebalance does to the latency of the writes that keep arriving, and what to do about the one customer whose data is seven times the size of everyone else's.
 
-This lab rebuilds, from scratch and on generated data, the patterns I worked through on client engagements: a warehouse migrated table by table onto Citus, and an audit of a multi-terabyte TimescaleDB hypertable whose index outweighed its data. No client code, schema or figures are in here — every number below was measured on this rig and is in [MEASUREMENTS.md](MEASUREMENTS.md) with its method and the file it came from.
+This lab rebuilds, from scratch and on generated data, the patterns I worked through in production: a warehouse migrated table by table onto Citus, and an audit of a multi-terabyte TimescaleDB hypertable whose index outweighed its data. Every number below was measured on this rig and is in [MEASUREMENTS.md](MEASUREMENTS.md) with its method and the file it came from.
 
 Citus has been part of my work since 2021; [citusdata/citus#4776](https://github.com/citusdata/citus/issues/4776) is a report of mine from then — adding a constraint without a name to a distributed table failed — which Citus's maintainers fixed by adding unnamed-constraint support in January 2023.
 

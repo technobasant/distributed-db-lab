@@ -1,4 +1,4 @@
-"""Seeded synthetic datasets for the lab.
+"""Generated datasets for the lab, reproducible from a fixed seed.
 
 Three datasets, all deterministic for a given --seed and --scale:
 
@@ -16,7 +16,7 @@ Output is CSV with a header row, one file per table, written to --out.
     python tools/datagen.py ticks  --scale lab   --out data/ticks
     python tools/datagen.py events --scale lab   --out data/events
 
-Nothing here is real data; every name is generated.
+Every name is generated.
 """
 
 from __future__ import annotations
