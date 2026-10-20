@@ -1,6 +1,6 @@
 # Containers from other projects that were running, idle, in the same Docker VM
-# during these runs. Project names are withheld; what matters for the figures is
-# that 13 unrelated containers shared the VM.
+# during these runs. What matters for the figures is that 13 unrelated
+# containers shared the VM.
 #
 # a web application stack (7): backend, nginx, celery worker, celery beat,
 #   PostgreSQL, ClickHouse, Redis
